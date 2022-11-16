@@ -156,7 +156,7 @@ namespace WindowsFormsAppAuutók
                 MessageBox.Show("Nincs kijelölve autó!");
                 return;
             }
-            cmd.CommandText= "UPDATE `autók` SET `rendszám` = '@rendszám', `üzembehelyezve` = '@üzembehelyezve', `szín` = '@szín' WHERE `autók`.`id` = @id;";
+            cmd.CommandText= "UPDATE `autók` SET `rendszám` = @rendszám, `üzembehelyezve` = @üzembehelyezve, `szín` = @szín WHERE `autók`.`id` = @id;";
             cmd.Parameters.Clear();
             cmd.Parameters.AddWithValue("@id", textBoxId.Text);
             cmd.Parameters.AddWithValue("@rendszám", textBoxRendszam.Text);
