@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Utilities.Collections;
 
 namespace WindowsFormsAppAuutók
 {
@@ -16,6 +17,8 @@ namespace WindowsFormsAppAuutók
     {
         MySqlConnection conn = null;
         MySqlCommand cmd = null;
+        private bool nincsenek;
+
         public Form1()
         {
             InitializeComponent();
@@ -70,25 +73,9 @@ namespace WindowsFormsAppAuutók
         }
 
         private void buttonUjAuto_Click(object sender, EventArgs e)
-        {
-            //--Szükséges adatok ellenörzése
-            if (string.IsNullOrEmpty(textBoxRendszam.Text))
+        {           
+            if (nincsenek_adatok())
             {
-                MessageBox.Show("Adjon meg rendszámot!");
-                textBoxRendszam.Focus();
-                return;
-            }
-            if (numericUpDownEvJarat.Value>DateTime.Now.Year)
-            {
-                MessageBox.Show("Érvénytelen évjárat!");
-                numericUpDownEvJarat.Value=DateTime.Now.Year;
-                numericUpDownEvJarat.Focus();
-                return;
-            }
-            if (string.IsNullOrEmpty(textBoxSzin.Text))
-            {
-                MessageBox.Show("Nem adott meg színt!");
-                textBoxSzin.Focus();
                 return;
             }
             //-- Kiírjuk az adatbázisba ------
@@ -120,6 +107,106 @@ namespace WindowsFormsAppAuutók
             }
             conn.Close();
             Autok_lista_update();
+        }
+
+        private bool nincsenek_adatok()
+        {
+            //--Szükséges adatok ellenörzése
+            if (string.IsNullOrEmpty(textBoxRendszam.Text))
+            {
+                MessageBox.Show("Adjon meg rendszámot!");
+                textBoxRendszam.Focus();
+                return true;
+            }
+            if (numericUpDownEvJarat.Value > DateTime.Now.Year)
+            {
+                MessageBox.Show("Érvénytelen évjárat!");
+                numericUpDownEvJarat.Value = DateTime.Now.Year;
+                numericUpDownEvJarat.Focus();
+                return true;
+            }
+            if (string.IsNullOrEmpty(textBoxSzin.Text))
+            {
+                MessageBox.Show("Nem adott meg színt!");
+                textBoxSzin.Focus();
+                return true;
+            }
+            return false;
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {            
+            if (listBox1.SelectedIndex < 0)
+            {
+                return;
+            }
+            //--A felhasználó kijelöl egy elemet a listában -------
+            Auto kivalaszott_auto = (Auto)listBox1.SelectedItem;
+            textBoxId.Text = kivalaszott_auto.Id.ToString();
+            textBoxRendszam.Text = kivalaszott_auto.Rendszam;
+            textBoxSzin.Text = kivalaszott_auto.Szin;
+            numericUpDownEvJarat.Value = kivalaszott_auto.Evjarat;
+
+        }
+
+        private void buttonModositas_Click(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedIndex<0)
+            {
+                MessageBox.Show("Nincs kijelölve autó!");
+                return;
+            }
+            cmd.CommandText= "UPDATE `autók` SET `rendszám` = '@rendszám', `üzembehelyezve` = '@üzembehelyezve', `szín` = '@szín' WHERE `autók`.`id` = @id;";
+            cmd.Parameters.Clear();
+            cmd.Parameters.AddWithValue("@id", textBoxId.Text);
+            cmd.Parameters.AddWithValue("@rendszám", textBoxRendszam.Text);
+            cmd.Parameters.AddWithValue("@üzembehelyezve", numericUpDownEvJarat.Value);
+            cmd.Parameters.AddWithValue("@szín", textBoxSzin.Text);
+            conn.Open();
+            if (cmd.ExecuteNonQuery() == 1)
+            {
+                MessageBox.Show("Módosítás sikeres!");
+                conn.Close();
+                textBoxId.Text = "";
+                textBoxRendszam.Text = "";
+                textBoxSzin.Text = "";
+                numericUpDownEvJarat.Value = numericUpDownEvJarat.Minimum;
+                Autok_lista_update();
+            }
+            else
+            {
+                MessageBox.Show("Az adatok modosítása sikerleten!");
+            }
+            if (conn.State == ConnectionState.Open)
+            {
+                conn.Close();
+            }
+        }
+
+        private void buttonTorles_Click(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedIndex<0)
+            {
+                return;
+            }
+            cmd.CommandText = "DELETE FROM `autók` WHERE `id` = @id";
+            cmd.Parameters.Clear();
+            cmd.Parameters.AddWithValue("@id", textBoxId.Text);
+            conn.Open();
+            if (cmd.ExecuteNonQuery() == 1)
+            {
+                MessageBox.Show("Törlés sikeres!");
+                conn.Close();
+                textBoxId.Text = "";
+                textBoxRendszam.Text = "";
+                textBoxSzin.Text = "";
+                numericUpDownEvJarat.Value = numericUpDownEvJarat.Minimum;
+                Autok_lista_update();
+            }
+            else
+            {
+                MessageBox.Show("Törlés sikertelen!");
+            }
         }
     }
 }

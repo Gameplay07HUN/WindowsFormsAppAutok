@@ -34,11 +34,11 @@
             this.labelId = new System.Windows.Forms.Label();
             this.labelRendszam = new System.Windows.Forms.Label();
             this.labelEvjarat = new System.Windows.Forms.Label();
+            this.textBoxSzin = new System.Windows.Forms.TextBox();
             this.labelSzin = new System.Windows.Forms.Label();
+            this.numericUpDownEvJarat = new System.Windows.Forms.NumericUpDown();
             this.textBoxId = new System.Windows.Forms.TextBox();
             this.textBoxRendszam = new System.Windows.Forms.TextBox();
-            this.numericUpDownEvJarat = new System.Windows.Forms.NumericUpDown();
-            this.textBoxSzin = new System.Windows.Forms.TextBox();
             this.buttonUjAuto = new System.Windows.Forms.Button();
             this.buttonModositas = new System.Windows.Forms.Button();
             this.buttonTorles = new System.Windows.Forms.Button();
@@ -54,6 +54,7 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(120, 450);
             this.listBox1.TabIndex = 0;
+            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // groupBox1
             // 
@@ -99,6 +100,13 @@
             this.labelEvjarat.TabIndex = 4;
             this.labelEvjarat.Text = "évjárat";
             // 
+            // textBoxSzin
+            // 
+            this.textBoxSzin.Location = new System.Drawing.Point(72, 162);
+            this.textBoxSzin.Name = "textBoxSzin";
+            this.textBoxSzin.Size = new System.Drawing.Size(100, 20);
+            this.textBoxSzin.TabIndex = 9;
+            // 
             // labelSzin
             // 
             this.labelSzin.AutoSize = true;
@@ -107,6 +115,18 @@
             this.labelSzin.Size = new System.Drawing.Size(27, 13);
             this.labelSzin.TabIndex = 5;
             this.labelSzin.Text = "szín";
+            // 
+            // numericUpDownEvJarat
+            // 
+            this.numericUpDownEvJarat.Location = new System.Drawing.Point(72, 129);
+            this.numericUpDownEvJarat.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.numericUpDownEvJarat.Name = "numericUpDownEvJarat";
+            this.numericUpDownEvJarat.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDownEvJarat.TabIndex = 8;
             // 
             // textBoxId
             // 
@@ -121,25 +141,6 @@
             this.textBoxRendszam.Name = "textBoxRendszam";
             this.textBoxRendszam.Size = new System.Drawing.Size(100, 20);
             this.textBoxRendszam.TabIndex = 7;
-            // 
-            // numericUpDownEvJarat
-            // 
-            this.numericUpDownEvJarat.Location = new System.Drawing.Point(72, 129);
-            this.numericUpDownEvJarat.Maximum = new decimal(new int[] {
-            9999,
-            0,
-            0,
-            0});
-            this.numericUpDownEvJarat.Name = "numericUpDownEvJarat";
-            this.numericUpDownEvJarat.Size = new System.Drawing.Size(120, 20);
-            this.numericUpDownEvJarat.TabIndex = 8;
-            // 
-            // textBoxSzin
-            // 
-            this.textBoxSzin.Location = new System.Drawing.Point(72, 162);
-            this.textBoxSzin.Name = "textBoxSzin";
-            this.textBoxSzin.Size = new System.Drawing.Size(100, 20);
-            this.textBoxSzin.TabIndex = 9;
             // 
             // buttonUjAuto
             // 
@@ -159,6 +160,7 @@
             this.buttonModositas.TabIndex = 11;
             this.buttonModositas.Text = "Modosítás";
             this.buttonModositas.UseVisualStyleBackColor = true;
+            this.buttonModositas.Click += new System.EventHandler(this.buttonModositas_Click);
             // 
             // buttonTorles
             // 
@@ -168,6 +170,7 @@
             this.buttonTorles.TabIndex = 12;
             this.buttonTorles.Text = "Törlés";
             this.buttonTorles.UseVisualStyleBackColor = true;
+            this.buttonTorles.Click += new System.EventHandler(this.buttonTorles_Click);
             // 
             // Form1
             // 
